@@ -1,0 +1,39 @@
+{
+    "name": "hoon",
+    "main": "src/hoon.js",
+    "version": "1.0.0",
+    "homepage": "https://github.com/TsukimiShion/hoon",
+    "authors": [
+        "Tsukimi Shion <tsukimishion@gmail.com>"
+    ],
+    "description": "JavaScript utility library.",
+    "keywords": [
+        "hoon",
+        "utility",
+        "JavaScript"
+    ],
+    "license": "GNU GPL ver 3",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "underscore": null
+    },
+    "devDependencies": {
+        "mocha": null,
+        "chai": null,
+        "jquery": null
+    },
+    "exportsOverride": {
+        "jquery": {
+            "": ["dist/jquery.js", "dist/jquery.min.js", "dist/jquery.min.map"]
+        },
+        "underscore": {
+            "": ["underscore.js", "underscore-min.js", "underscore-min.map"]
+        }
+    }
+}
