@@ -1,0 +1,203 @@
+{
+    "project": {
+        "name": "hoon",
+        "description": "JavaScript utility library.",
+        "version": "1.0.0",
+        "url": "https://github.com/TsukimiShion/hoon"
+    },
+    "files": {
+        "src/hoon.js": {
+            "name": "src/hoon.js",
+            "modules": {},
+            "classes": {
+                "hoon": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "hoon": {
+            "name": "hoon",
+            "shortname": "hoon",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/hoon.js",
+            "line": 4,
+            "static": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/hoon.js",
+            "line": 10,
+            "description": "Extract object's properties and return the new object.",
+            "itemtype": "method",
+            "name": "extract",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "extract",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var obj = { 0:0, 1:1, 2:2, 3:3 };\n    var ret = hoon.extract(obj, function(val, key){\n        return (key % 2) == 0;\n    });\n    console.log(ret); // { 0:0, 2:2 }\n    console.log(obj); // { 0:0, 1:1, 2:2, 3:3 };",
+                "\n    // ex2\n    var obj = { 0:0, 1:1, 2:2, 3:3 };\n    var ret = hoon.extract(obj, function(val){\n        return val < 2;\n    });\n    console.log(ret); // { 0:0, 1:1 }\n    console.log(obj); // { 0:0, 1:1, 2:2, 3:3 };",
+                "\n    // ex3\n    var obj = { 0:0, 1:1, 2:2, 3:3 };\n    var ret = hoon.extract(obj, function(val){\n        return val > 3;\n    });\n    console.log(ret); // {}\n    console.log(obj); // { 0:0, 1:1, 2:2, 3:3 };\n"
+            ],
+            "class": "hoon"
+        },
+        {
+            "file": "src/hoon.js",
+            "line": 55,
+            "description": "Extract object's properties, convert and return the new object.\n\n**fmap = filter + map**",
+            "itemtype": "method",
+            "name": "fmap",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "fmap",
+                    "description": "",
+                    "type": "Function"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var obj = { 0:0, 1:1, 2:2, 3:3 };\n    var ret = hoon.fmap(obj, function(val, key){\n        if ((key % 2) === 1){\n            return [key, key * val];\n        }\n    });\n    console.log(ret); // { 1:1, 3:9 }\n    console.log(obj); // { 0:0, 1:1, 2:2, 3:3 };",
+                "\n    // ex2\n    var obj = { 0:0, 1:1, 2:2, 3:3 };\n    var ret = hoon.fmap(obj, function(val){\n        if (val > 3){\n            return [key, val];\n        }\n    });\n    console.log(ret); // {}\n    console.log(obj); // { 0:0, 1:1, 2:2, 3:3 };",
+                "\n    // ex3\n    var obj = {};\n    var ret = hoon.fmap(obj, function(val, key){\n        if (val > 3){\n            return [key, val];\n        }\n    });\n    console.log(ret); // {}\n    console.log(obj); // {}"
+            ],
+            "class": "hoon"
+        },
+        {
+            "file": "src/hoon.js",
+            "line": 108,
+            "description": "Pad a string with given characters.",
+            "itemtype": "method",
+            "name": "padding",
+            "params": [
+                {
+                    "name": "str",
+                    "description": "A padded string.",
+                    "type": "String"
+                },
+                {
+                    "name": "len",
+                    "description": "The max length of the return value.",
+                    "type": "Integer"
+                },
+                {
+                    "name": "char",
+                    "description": "",
+                    "type": "String"
+                },
+                {
+                    "name": "flag",
+                    "description": "If flag is true, str is padded to the rigtht, else left.",
+                    "type": "Boolean",
+                    "optional": true,
+                    "optdefault": "false"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "String"
+            },
+            "example": [
+                "\n    // ex1\n    var ret = hoon.padding(\"5\", 3, \"0\");\n    console.log(ret); // \"005\"",
+                "\n    // ex2\n    var ret = hoon.padding(\"hello\", 13, \"<*>\", true);\n    console.log(ret); // \"hello<*><*>\""
+            ],
+            "class": "hoon"
+        },
+        {
+            "file": "src/hoon.js",
+            "line": 144,
+            "description": "Union sources's properties and return the new object.\nUnlike [underscore's extend](http://underscorejs.org/#extend),\nthe first argument is not changed.",
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "*sources",
+                    "description": "This method is passed the arbitary number of objects as arguments.\nIt's in-order, so the last source will override properties of the same name in previous arguments.",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var s1 = {0:0, 1:1, 2:2};\n    var s2 = {1:3, 2:5, 3:3, 4:4};\n    var s3 = {2:7, 5:8};\n    var ret = hoon.extend(s1, s2, s3);\n    console.log(ret); // {0:0, 1:3, 2:7, 3:3, 4:4, 5:8}\n    console.log(s1); // {0:0, 1:1, 2:2}\n    console.log(s2); // {1:3, 2:5, 3:3, 4:4}\n    console.log(s3); // {2:7, 5:8}",
+                "\n    // ex2\n    console.log(hoon.extend()); // {}"
+            ],
+            "class": "hoon"
+        },
+        {
+            "file": "src/hoon.js",
+            "line": 181,
+            "description": "The helper method of [underscore's template](http://underscorejs.org/#template).",
+            "itemtype": "method",
+            "name": "templates",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var ret = hoon.templates({\n        hello: \"Hello, <%= name %>.\",\n        date, \"<%= month %>/<%= day %>\",\n    });\n    console.log(ret.hello({name: \"John\"})); // Hello, John.\n    console.log(ret.date({month: 10, day: 12})); // 10/12",
+                "\n    // ex2\n    var ret = hoon.templates({}); // {}"
+            ],
+            "class": "hoon"
+        },
+        {
+            "file": "src/hoon.js",
+            "line": 208,
+            "description": "Return the pseudo deep clone of the argument.",
+            "itemtype": "method",
+            "name": "clone",
+            "params": [
+                {
+                    "name": "obj",
+                    "description": "obj must be comprise of the following objects.\n- literal number(ex: 1)\n- literal string(ex: \"hello\")\n- undefined, null, NaN\n- true, false\n- Boolean, Number, String, RegExp, Date, Array, Object",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "The deep clone of the argument.",
+                "type": "Object"
+            },
+            "example": [
+                "\n    // ex1\n    var obj = {0:{1:1}};\n    var ret = hoon.clone(obj);\n    console.log(obj); // {0:{1:1}};\n    console.log(ret); // {0:{1:1}};\n    ret[0][1] = 3;\n    console.log(obj); // {0:{1:1}};\n    console.log(ret); // {0:{1:3}};\n"
+            ],
+            "class": "hoon"
+        }
+    ],
+    "warnings": []
+}
