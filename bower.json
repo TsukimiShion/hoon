@@ -1,7 +1,7 @@
 {
     "name": "hoon",
     "main": "src/hoon.js",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "homepage": "https://github.com/TsukimiShion/hoon",
     "authors": [
         "Tsukimi Shion <tsukimishion@gmail.com>"
@@ -12,7 +12,7 @@
         "utility",
         "JavaScript"
     ],
-    "license": "GNU GPL ver 3",
+    "license": "GNU GPL v3.0",
     "ignore": [
         "**/.*",
         "node_modules",
