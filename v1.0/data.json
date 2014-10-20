@@ -2,7 +2,7 @@
     "project": {
         "name": "hoon",
         "description": "JavaScript utility library.",
-        "version": "1.0.0",
+        "version": "1.0",
         "url": "https://github.com/TsukimiShion/hoon"
     },
     "files": {
