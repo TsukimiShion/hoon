@@ -1,6 +1,6 @@
 {
     "name": "hoon",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "JavaScript utility library.",
     "main": "src/hoon.js",
     "scripts": {
@@ -16,7 +16,7 @@
         "utility"
     ],
     "author": "Tsukimi Shion <tsukimishion@gmail.com>",
-    "license": "GNU GPL ver 3",
+    "license": "GNU GPL v3.0",
     "bugs": {
         "url": "https://github.com/TsukimiShion/hoon/issues"
     },
