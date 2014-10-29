@@ -50,12 +50,17 @@ module.exports = function (grunt) {
             compile: {
                 name: "<%= pkg.name %>",
                 description: "<%= pkg.description %>",
-                version: "1.0",
+                version: "1.1",
                 url: "<%= pkg.homepage %>",
                 options: {
                     paths: "src",
                     outdir: "yuidoc"
                 }
+            }
+        },
+        jsonlint: {
+            sample: {
+                src: "*.json"
             }
         }
     });
@@ -63,6 +68,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-contrib-yuidoc");
     grunt.loadNpmTasks("grunt-bower-task");
+    grunt.loadNpmTasks("grunt-jsonlint");
     grunt.loadNpmTasks("grunt-mocha");
     grunt.loadNpmTasks("grunt-simple-mocha");
     grunt.registerTask("test", ["mocha", "simplemocha"]);

@@ -1,7 +1,7 @@
 {
     "name": "hoon",
     "main": "src/hoon.js",
-    "version": "1.0.1",
+    "version": "1.1.0",
     "homepage": "https://github.com/TsukimiShion/hoon",
     "authors": [
         "Tsukimi Shion <tsukimishion@gmail.com>"

@@ -1,7 +1,6 @@
 {
     "eqeqeq": true,
     "forin": true,
-    "quotmark": "double",
     "maxparams": 4,
     "supernew": true,
     "node": true,

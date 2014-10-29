@@ -1,7 +1,7 @@
 (function(){
     "use strict";
     function run_test(assert, hoon, underscore){
-        /* global suite: false, test: false */
+        /* global suite: false, test: false, localStorage: false, sessionStorage: false */
         suite("extract", function(){
             test("normal", function(){
                 var obj = { 0:0, 1:1, 2:2, 3:3 };
@@ -243,6 +243,223 @@
                 assert.notOk(ret === obj, "OK");
             });
         });
+
+        suite("json.stringify", function(){
+            test("NaN", function(){
+                assert.equal(hoon.json.stringify("NaN"), '"\\"NaN\\""', "OK");
+                assert.equal(hoon.json.stringify(NaN), '"NaN"', "OK");
+            });
+            test("undefined", function(){
+                assert.equal(hoon.json.stringify("undefined"), '"\\"undefined\\""', "OK");
+                assert.equal(hoon.json.stringify(undefined), '"undefined"', "OK");
+            });
+            test("RegExp", function(){
+                assert.equal(hoon.json.stringify("/ab/"), '"\\"/ab/\\""', "OK");
+                assert.equal(hoon.json.stringify(/ab/), '"/ab/"', "OK");
+            });
+        });
+        suite("json.parse", function(){
+            test("NaN", function(){
+                assert.equal(hoon.json.parse('"\\"NaN\\""'), "NaN", "OK");
+                assert.ok(underscore.isNaN(hoon.json.parse('"NaN"')), "OK");
+            });
+            test("undefined", function(){
+                assert.equal(hoon.json.parse('"\\"undefined\\""'), "undefined", "OK");
+                assert.equal(hoon.json.parse('"undefined"'), undefined, "OK");
+            });
+            test("RegExp", function(){
+                assert.equal(hoon.json.parse('"\\"/ab/\\""'), "/ab/", "OK");
+                var re = hoon.json.parse('"/ab/"');
+                assert.ok(underscore.isRegExp(re), "OK");
+                assert.equal(re.source, "ab", "OK");
+            });
+        });
+        suite("json.parse stringify", function(){
+            test("NaN", function(){
+                assert.ok(underscore.isNaN(hoon.json.parse(hoon.json.stringify(NaN))), "OK");
+                assert.equal(hoon.json.parse(hoon.json.stringify("NaN")), "NaN", "OK");
+            });
+            test("undefined", function(){
+                assert.ok(underscore.isUndefined(hoon.json.parse(hoon.json.stringify(undefined))), "OK");
+                assert.equal(hoon.json.parse(hoon.json.stringify("undefined")), "undefined", "OK");
+            });
+            test("RegExp", function(){
+                var re = hoon.json.parse(hoon.json.stringify(/ab/));
+                assert.ok(underscore.isRegExp(re), "OK");
+                assert.equal(re.source, "ab", "OK");
+                assert.equal(hoon.json.parse(hoon.json.stringify("/ab/")), "/ab/", "OK");
+            });
+            test("String", function(){
+                assert.equal(hoon.json.parse(hoon.json.stringify("Hello World")), "Hello World", "OK");
+            });
+            test("Number", function(){
+                assert.equal(hoon.json.parse(hoon.json.stringify(-1)), -1, "OK");
+                assert.equal(hoon.json.parse(hoon.json.stringify("-1")), "-1", "OK");
+            });
+            test("null", function(){
+                assert.ok(underscore.isNull(hoon.json.parse(hoon.json.stringify(null))), "OK");
+                assert.equal(hoon.json.parse(hoon.json.stringify("null")), "null", "OK");
+            });
+        });
+
+        if (typeof(Storage) !== "undefined"){
+            suite("localStorage.getItem", function(){
+                test("getItem normal", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", "John");
+                    assert.equal(hoon.localStorage.getItem("name"), "John", "OK");
+                });
+                test("getItem Number", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", -1);
+                    assert.equal(hoon.localStorage.getItem("name"), -1, "OK");
+                    hoon.localStorage.setItem("name", "-1");
+                    assert.equal(hoon.localStorage.getItem("name"), "-1", "OK");
+                });
+                test("getItem Object", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", {id: 3});
+                    assert.ok(underscore.isEqual(hoon.localStorage.getItem("name"), {id: 3}), "OK");
+                });
+                test("getItem Array", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", [1, 3]);
+                    assert.ok(underscore.isEqual(hoon.localStorage.getItem("name"), [1, 3]), "OK");
+                });
+                test("getItem null", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", null);
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", "null");
+                    assert.equal(hoon.localStorage.getItem("name"), "null", "OK");
+                });
+                test("getItem undefined", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", undefined);
+                    assert.equal(hoon.localStorage.getItem("name"), undefined, "OK");
+                    hoon.localStorage.setItem("name", "undefined");
+                    assert.equal(hoon.localStorage.getItem("name"), "undefined", "OK");
+                });
+                test("getItem object.undefined", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", {name: undefined});
+                    assert.ok(underscore.isEqual(hoon.localStorage.getItem("name"), {name:undefined}), "OK");
+                });
+                test("getItem NaN", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", NaN);
+                    assert.ok(underscore.isNaN(hoon.localStorage.getItem("name")), "OK");
+                    hoon.localStorage.setItem("name", "NaN");
+                    assert.equal(hoon.localStorage.getItem("name"), "NaN", "OK");
+                });
+                test("getItem RegExp", function(){
+                    localStorage.clear();
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                    hoon.localStorage.setItem("name", /ab/);
+                    assert.ok(underscore.isRegExp(hoon.localStorage.getItem("name")), "OK");
+                    hoon.localStorage.setItem("name", "/ab/");
+                    assert.equal(hoon.localStorage.getItem("name"), "/ab/", "OK");
+                });
+            });
+            suite("localStorage.removeItem", function(){
+                test("removeItem normal", function(){
+                    localStorage.clear();
+                    localStorage.setItem("name", "John");
+                    assert.equal(localStorage.getItem("name"), "John", "OK");
+                    hoon.localStorage.removeItem("name");
+                    assert.equal(hoon.localStorage.getItem("name"), null, "OK");
+                });
+            });
+            suite("localStorage.clear", function(){
+                test("clear normal", function(){
+                    localStorage.setItem("name", "John");
+                    assert.equal(localStorage.getItem("name"), "John", "OK");
+                    hoon.localStorage.clear();
+                    assert.equal(localStorage.length, 0, "OK");
+                });
+            });
+            suite("localStorage.key", function(){
+                test("key normal", function(){
+                    localStorage.clear();
+                    localStorage.setItem("name", "John");
+                    assert.equal(hoon.localStorage.key(0), "name", "OK");
+                    assert.equal(hoon.localStorage.key(1), null, "OK");
+                    hoon.localStorage.clear();
+                });
+            });
+            suite("localStorage.get", function(){
+                test("get string", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set("name", "John");
+                    assert.equal(hoon.localStorage.get("name"), "John", "OK");
+                    hoon.localStorage.clear();
+                });
+                test("get array", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set({name: "John", id: 3});
+                    assert.ok(underscore.isEqual(hoon.localStorage.get(["name", "id"]), {name: "John", id: 3}), "OK");
+                    hoon.localStorage.clear();
+                });
+                test("get no argument", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set({name: "John", id: 3});
+                    assert.ok(underscore.isEqual(hoon.localStorage.get(), {name: "John", id: 3}), "OK");
+                    hoon.localStorage.clear();
+                });
+                test("get null", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set({name: "John", id: 3});
+                    assert.ok(underscore.isEqual(hoon.localStorage.get(null), {name: "John", id: 3}), "OK");
+                    hoon.localStorage.clear();
+                });
+                test("get null empty", function(){
+                    localStorage.clear();
+                    assert.ok(underscore.isEqual(hoon.localStorage.get(null), {}), "OK");
+                    hoon.localStorage.clear();
+                });
+            });
+            suite("localStorage.remove", function(){
+                test("remove string", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set("name", "John");
+                    assert.equal(hoon.localStorage.get("name"), "John", "OK");
+                    hoon.localStorage.remove("name");
+                    assert.equal(hoon.localStorage.get("name"), null, "OK");
+                    localStorage.clear();
+                });
+                test("remove array", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set({name: "John", id: 3});
+                    hoon.localStorage.remove(["name", "id"]);
+                    assert.equal(hoon.localStorage.get("name"), null, "OK");
+                    localStorage.clear();
+                });
+                test("remove null", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set("name", "John");
+                    assert.equal(hoon.localStorage.get("name"), "John", "OK");
+                    hoon.localStorage.remove(null);
+                    assert.equal(hoon.localStorage.get("name"), null, "OK");
+                    localStorage.clear();
+                });
+                test("remove no argument", function(){
+                    localStorage.clear();
+                    hoon.localStorage.set("name", "John");
+                    assert.equal(hoon.localStorage.get("name"), "John", "OK");
+                    hoon.localStorage.remove();
+                    assert.equal(hoon.localStorage.get("name"), null, "OK");
+                    localStorage.clear();
+                });
+            });
+        }
         
     }
 
