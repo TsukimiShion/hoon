@@ -244,6 +244,28 @@
             });
         });
 
+        suite("applyConstructor", function(){
+            test("normal", function(){
+                function Foo(name, age){
+                    this.name = name;
+                    this.age = age;
+                }
+
+                var foo = hoon.applyConstructor(Foo, ["John", 20]);
+                assert.ok(foo instanceof Foo);
+                assert.equal(foo.name, "John");
+                assert.equal(foo.age, 20);
+            });
+        });
+
+        suite("makeObject", function(){
+            test("normal", function(){
+                assert.ok(underscore.isEqual(hoon.makeObject("name", "John"), {name: "John"}));
+                assert.ok(underscore.isEqual(hoon.makeObject(["name", "age"], ["John", 20]), {name: "John", age: 20}));
+                assert.ok(underscore.isEqual(hoon.makeObject(["name", "age"], 20), {name: 20, age: 20}));
+            });
+        });
+
         suite("json.stringify", function(){
             test("NaN", function(){
                 assert.equal(hoon.json.stringify("NaN"), '"\\"NaN\\""', "OK");
