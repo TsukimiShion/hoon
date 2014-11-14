@@ -1,6 +1,6 @@
 {
     "name": "hoon",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "description": "JavaScript utility library.",
     "main": "src/hoon.js",
     "scripts": {

@@ -262,6 +262,68 @@
         }
     };
 
+    exports.applyConstructor = function(Constructor, args){
+        /**
+         * create an instance of **Constructor** with a given arguments provided as an array.
+         *
+         * @method applyConstructor
+         * @param {Function} Constructor A constructor function.
+         * @param {Array} args
+         *
+         * @return {Constructor} An instance of **Constructor**.
+         * @example
+         *     function Foo(name, age){
+         *         this.name = name;
+         *         this.age = age;
+         *     }
+         *     var foo = hoon.applyConstructor(Foo, ["John", 20]); // new Foo("John", 20);
+         *
+         */
+        function construct(args){
+            Constructor.apply(this, args);
+        }
+
+        construct.prototype = Constructor.prototype;
+
+        return new construct(args);
+    };
+
+    exports.makeObject = function(keys, values){
+        /**
+         * create an objects.
+         *
+         * @method makeObject
+         * @param {String|Array of String} keys
+         * @param {Anything} values
+         *
+         * @return {Object}
+         * @example
+         *     var keys = "name";
+         *     var values = "John";
+         *     console.log(hoon.makeObject(keys, values)); // { name: "John" }
+         *     keys = ["name", "age"];
+         *     values = ["John", 20];
+         *     console.log(hoon.makeObject(keys, values)); // { name: "John", age: 20 }
+         *     var values = "John";
+         *     console.log(hoon.makeObject(keys, values)); // { name: "John", age: "John" }
+         *     var values = [["John", 20]];
+         *     console.log(hoon.makeObject(keys, values)); // { name: ["John", 20], age: ["John", 20] }
+         */
+        var ret = {};
+        if (underscore.isArray(keys)){
+            if (underscore.isArray(values)){
+                ret = underscore.object(keys, values);
+            } else {
+                keys.forEach(function(key){
+                    ret[key] = values;
+                });
+            }
+        } else if (underscore.isString(keys)){
+            ret[keys] = values;
+        }
+        return ret;
+    };
+
     exports.json = new function(){
         /**
          * [JSON](http://www.json.org/) does not consider the following elements.
